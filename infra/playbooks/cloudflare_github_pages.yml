@@ -1,0 +1,6 @@
+---
+- name: Configure Cloudflare DNS for GitHub Pages (onlytasks.eu)
+  hosts: cloudflare
+  gather_facts: false
+  roles:
+    - role: cloudflare_github_pages

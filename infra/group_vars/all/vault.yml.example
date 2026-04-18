@@ -1,0 +1,4 @@
+---
+# Copy to vault.yml and encrypt: ansible-vault encrypt group_vars/all/vault.yml
+# ansible-vault edit group_vars/all/vault.yml
+cloudflare_api_token: REPLACE_WITH_CLOUDFLARE_API_TOKEN

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#07080b" />
+    <meta name="theme-color" content="#f4f5f8" media="(prefers-color-scheme: light)" />
+    <title>Only Tasks — Coming soon</title>
+    <meta
+      name="description"
+      content="Only Tasks — Do the sexy stuff yourself, for the rest Only Tasks. Coming soon."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Only Tasks" />
+    <meta
+      property="og:description"
+      content="Do the sexy stuff yourself, for the rest Only Tasks. Coming soon."
+    />
+    <meta property="og:url" content="https://onlytasks.eu/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Only Tasks" />
+    <meta
+      name="twitter:description"
+      content="Do the sexy stuff yourself, for the rest Only Tasks. Coming soon."
+    />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Syne:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <div class="backdrop" aria-hidden="true">
+      <div class="orb orb-a"></div>
+      <div class="orb orb-b"></div>
+      <div class="orb orb-c"></div>
+      <div class="grid-fade"></div>
+    </div>
+
+    <div class="shell">
+      <header class="top">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <p class="domain">onlytasks.eu</p>
+      </header>
+
+      <main id="main" class="layout">
+        <div class="panel">
+          <p class="kicker">Coming soon</p>
+          <h1 class="title">
+            <span class="title__only">Only</span>
+            <span class="title__tasks">Tasks</span>
+          </h1>
+          <p class="tagline">
+            Do the sexy stuff yourself,<wbr /> for the rest
+            <span class="tagline__brand">Only Tasks</span>.
+          </p>
+          <div class="status-row" role="status">
+            <span class="pulse" aria-hidden="true"></span>
+            <p class="status-label">
+              <strong class="status-label__lead">Coming soon</strong>
+              <span class="status-label__rest"> — we are polishing what ships first.</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="stage" aria-hidden="true">
+          <div class="ring ring--1"></div>
+          <div class="ring ring--2"></div>
+          <div class="ring ring--3"></div>
+          <div class="beam"></div>
+        </div>
+      </main>
+
+      <footer class="footer">
+        <p class="footer__copy">&copy; <span id="year">2026</span> Only Tasks</p>
+      </footer>
+    </div>
+
+    <script>
+      document.getElementById("year").textContent = String(new Date().getFullYear());
+    </script>
+  </body>
+</html>

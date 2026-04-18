@@ -1,0 +1,5 @@
+---
+cloudflare_zone: onlytasks.eu
+cloudflare_proxied: false
+github_pages_default_host: onlytasks.github.io
+cloudflare_manage_www: true

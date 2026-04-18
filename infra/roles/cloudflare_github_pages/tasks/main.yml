@@ -1,0 +1,33 @@
+---
+- name: Ensure GitHub Pages apex A records exist
+  community.general.cloudflare_dns:
+    zone: "{{ cloudflare_zone }}"
+    record: "@"
+    type: A
+    value: "{{ item }}"
+    proxied: "{{ cloudflare_proxied }}"
+    api_token: "{{ cloudflare_api_token }}"
+    ttl: 1
+  loop: "{{ github_pages_a_records }}"
+
+- name: Ensure GitHub Pages apex AAAA records exist
+  community.general.cloudflare_dns:
+    zone: "{{ cloudflare_zone }}"
+    record: "@"
+    type: AAAA
+    value: "{{ item }}"
+    proxied: "{{ cloudflare_proxied }}"
+    api_token: "{{ cloudflare_api_token }}"
+    ttl: 1
+  loop: "{{ github_pages_aaaa_records }}"
+
+- name: Ensure www CNAME points at GitHub Pages default host
+  when: cloudflare_manage_www | bool
+  community.general.cloudflare_dns:
+    zone: "{{ cloudflare_zone }}"
+    record: www
+    type: CNAME
+    value: "{{ github_pages_default_host }}"
+    proxied: "{{ cloudflare_proxied }}"
+    api_token: "{{ cloudflare_api_token }}"
+    ttl: 1
