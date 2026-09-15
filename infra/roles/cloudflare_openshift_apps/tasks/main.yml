@@ -1,0 +1,11 @@
+---
+- name: Ensure OpenShift apps wildcard CNAME points at the cluster router
+  community.general.cloudflare_dns:
+    zone: "{{ cloudflare_zone }}"
+    record: "{{ openshift_apps_record }}"
+    type: CNAME
+    value: "{{ openshift_router_cname_target }}"
+    proxied: "{{ openshift_apps_proxied }}"
+    api_token: "{{ cloudflare_api_token }}"
+    ttl: 1
+    solo: true

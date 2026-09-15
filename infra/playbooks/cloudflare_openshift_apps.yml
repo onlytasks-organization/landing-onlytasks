@@ -1,0 +1,6 @@
+---
+- name: Configure Cloudflare DNS for OpenShift apps (*.apps.onlytasks.eu)
+  hosts: cloudflare
+  gather_facts: false
+  roles:
+    - role: cloudflare_openshift_apps

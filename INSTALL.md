@@ -43,11 +43,15 @@ Configure these at **Cloudflare** (or any DNS host) for the apex. If anything lo
 
 GitHub recommends also configuring **`www`**. Create a **`CNAME`** for `www` pointing to your Pages default host (**`<user>.github.io`** or **`<org>.github.io`** only — do not include the repository name).
 
+### OpenShift apps wildcard
+
+Create a **`CNAME`** for `*.apps` pointing at the OpenShift `router-default` load balancer hostname. Leave it **DNS only** (grey cloud). This does not cover `apps.onlytasks.eu` itself.
+
 ---
 
 ## Cloudflare (recommended defaults)
 
-- **Proxy:** set GitHub Pages **A** / **AAAA** (and usually **`www`** **`CNAME`**) to **DNS only** (grey cloud) for the simplest TLS behavior with GitHub-issued certificates.
+- **Proxy:** set GitHub Pages **A** / **AAAA** (and usually **`www`** **`CNAME`**) to **DNS only** (grey cloud) for the simplest TLS behavior with GitHub-issued certificates. Keep **`*.apps`** DNS-only as well: the OpenShift router ELB uses PROXY protocol.
 - **SSL/TLS:** if you later enable the orange cloud proxy, use **Full** (not Flexible).
 - **Registrar:** the domain’s nameservers must be Cloudflare’s for the zone managed in Cloudflare.
 
@@ -58,15 +62,19 @@ GitHub recommends also configuring **`www`**. Create a **`CNAME`** for `www` poi
 ```bash
 dig onlytasks.eu +noall +answer -t A
 dig onlytasks.eu +noall +answer -t AAAA
+dig wildcard-check.apps.onlytasks.eu +noall +answer -t CNAME
 ```
 
 Results should include the **A** and **AAAA** addresses listed above.
 
 ---
 
-## Ansible — Cloudflare DNS for GitHub Pages
+## Ansible — Cloudflare DNS
 
-The playbook under `infra/` ensures apex **`A`** / **`AAAA`** records and optional **`www`** **`CNAME`** point at GitHub Pages for **onlytasks.eu**.
+Playbooks under `infra/playbooks/` manage DNS for **onlytasks.eu**:
+
+- **`cloudflare_github_pages.yml`** — apex **`A`** / **`AAAA`** and optional **`www`** **`CNAME`** for GitHub Pages.
+- **`cloudflare_openshift_apps.yml`** — wildcard **`CNAME`** `*.apps.onlytasks.eu` to the OpenShift router (DNS only, grey cloud).
 
 ### Prerequisites
 
@@ -115,6 +123,7 @@ Edit `infra/group_vars/all/main.yml`:
 
 - **`github_pages_default_host`** — must be **`<user>.github.io`** or **`<org>.github.io`** (no repo path). Default is `onlytasks.github.io`; change it if your GitHub Pages default host differs.
 - **`cloudflare_manage_www`** — set to `false` if you do not want a `www` **CNAME**.
+- **`openshift_router_cname_target`** — hostname of the OpenShift `router-default` load balancer.
 
 GitHub’s apex **A** / **AAAA** values live in `infra/roles/cloudflare_github_pages/defaults/main.yml`; refresh them periodically from [GitHub’s apex domain documentation](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site#configuring-an-apex-domain).
 
@@ -123,6 +132,7 @@ GitHub’s apex **A** / **AAAA** values live in `infra/roles/cloudflare_github_p
 ```bash
 cd infra
 ansible-playbook -i inventory playbooks/cloudflare_github_pages.yml --ask-vault-pass
+ansible-playbook -i inventory playbooks/cloudflare_openshift_apps.yml --ask-vault-pass
 ```
 
 Check mode:
@@ -130,6 +140,7 @@ Check mode:
 ```bash
 cd infra
 ansible-playbook -i inventory playbooks/cloudflare_github_pages.yml --ask-vault-pass --check
+ansible-playbook -i inventory playbooks/cloudflare_openshift_apps.yml --ask-vault-pass --check
 ```
 
 If you use `CLOUDFLARE_TOKEN` in the environment instead of vault, you can omit `--ask-vault-pass` and ensure `cloudflare_api_token` is not required from vault (the module reads `CLOUDFLARE_TOKEN` when set).
@@ -142,6 +153,7 @@ ansible-galaxy collection install -r collections/requirements.yml -p .collection
 cp group_vars/all/vault.yml.example group_vars/all/vault.yml
 ansible-vault encrypt group_vars/all/vault.yml
 ansible-playbook -i inventory playbooks/cloudflare_github_pages.yml --ask-vault-pass
+ansible-playbook -i inventory playbooks/cloudflare_openshift_apps.yml --ask-vault-pass
 ```
 
 The in-repo `infra/README.md` mirrors the Ansible section for anyone browsing the repository without this file.

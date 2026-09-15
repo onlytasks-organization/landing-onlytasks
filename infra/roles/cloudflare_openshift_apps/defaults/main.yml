@@ -1,0 +1,9 @@
+---
+# Left-most label only: *.apps.onlytasks.eu (does not cover apps.onlytasks.eu itself).
+openshift_apps_record: "*.apps"
+
+# OpenShift router-default AWS Classic ELB for cluster-f7xwz sandbox.
+# Keep DNS-only: the router ELB uses PROXY protocol, so Cloudflare orange-cloud breaks HTTP.
+openshift_apps_proxied: false
+
+openshift_router_cname_target: accc091384fa5452ba0274165d384d6a-2101873781.us-east-2.elb.amazonaws.com

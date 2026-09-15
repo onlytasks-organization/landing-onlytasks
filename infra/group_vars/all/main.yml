@@ -3,3 +3,4 @@ cloudflare_zone: onlytasks.eu
 cloudflare_proxied: false
 github_pages_default_host: onlytasks.github.io
 cloudflare_manage_www: true
+openshift_router_cname_target: accc091384fa5452ba0274165d384d6a-2101873781.us-east-2.elb.amazonaws.com

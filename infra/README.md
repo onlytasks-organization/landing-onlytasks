@@ -1,6 +1,9 @@
-# Ansible — Cloudflare DNS for GitHub Pages
+# Ansible — Cloudflare DNS
 
-Playbook ensures apex **`A`** / **`AAAA`** records and optional **`www`** **`CNAME`** point at GitHub Pages for **onlytasks.eu**.
+Playbooks under `playbooks/` manage DNS for **onlytasks.eu**:
+
+- **`cloudflare_github_pages.yml`** — apex **`A`** / **`AAAA`** and optional **`www`** **`CNAME`** for GitHub Pages.
+- **`cloudflare_openshift_apps.yml`** — wildcard **`CNAME`** `*.apps.onlytasks.eu` to the OpenShift router (DNS only).
 
 The repository **README** describes the public landing only. This file documents the Ansible layout; see the root **`INSTALL.md`** for GitHub Pages, DNS, Cloudflare, and Ansible steps in one place.
 
@@ -49,6 +52,7 @@ Edit [`group_vars/all/main.yml`](group_vars/all/main.yml):
 
 - **`github_pages_default_host`** — must be **`<user>.github.io`** or **`<org>.github.io`** (no repo path). Default is `onlytasks.github.io`; change it if your GitHub Pages default host differs.
 - **`cloudflare_manage_www`** — set to `false` if you do not want a `www` **CNAME**.
+- **`openshift_router_cname_target`** — hostname of the OpenShift `router-default` load balancer.
 
 GitHub’s apex **A** / **AAAA** values live in [`roles/cloudflare_github_pages/defaults/main.yml`](roles/cloudflare_github_pages/defaults/main.yml); refresh them periodically from [GitHub’s apex domain documentation](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site#configuring-an-apex-domain).
 
@@ -57,12 +61,14 @@ GitHub’s apex **A** / **AAAA** values live in [`roles/cloudflare_github_pages/
 ```bash
 cd infra
 ansible-playbook -i inventory playbooks/cloudflare_github_pages.yml --ask-vault-pass
+ansible-playbook -i inventory playbooks/cloudflare_openshift_apps.yml --ask-vault-pass
 ```
 
 Check mode:
 
 ```bash
 ansible-playbook -i inventory playbooks/cloudflare_github_pages.yml --ask-vault-pass --check
+ansible-playbook -i inventory playbooks/cloudflare_openshift_apps.yml --ask-vault-pass --check
 ```
 
 If you use `CLOUDFLARE_TOKEN` in the environment instead of vault, you can omit `--ask-vault-pass` and ensure `cloudflare_api_token` is not required from vault (the module reads `CLOUDFLARE_TOKEN` when set).
